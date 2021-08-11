@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "Api"
+		},
+		{
+			"path": "ios"
+		},
+		{
+			"path": "telemetry-sender"
+		}
+	],
+	"settings": {
+		"debug.internalConsoleOptions": "neverOpen"
+	}
+}
