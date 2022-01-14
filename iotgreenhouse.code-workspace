@@ -7,7 +7,7 @@
 			"path": "ios"
 		},
 		{
-			"path": "telemetry-sender"
+			"path": "device.controller"
 		}
 	],
 	"settings": {

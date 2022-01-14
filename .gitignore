@@ -352,3 +352,4 @@ MigrationBackup/
 local.settings.json
 iot.device.controller/.env
 .DS_Store
+device.controller/.env

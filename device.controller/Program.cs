@@ -9,13 +9,16 @@ using Microsoft.Azure.Devices.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using device.controller.services;
 
-namespace iot.device.controller
+namespace device.controller
 {
     class Program
     {
         
         private const string ModelId = "dtmi:pnptestapp:raspberrypi3;1";
+
+        private static string conn = Environment.GetEnvironmentVariable("DEVICE_CONNECTION");
 
         private static string idScope = Environment.GetEnvironmentVariable("DPS_IDSCOPE");
         private static string registrationId = Environment.GetEnvironmentVariable("DPS_REGISTRATION_ID");
@@ -34,13 +37,25 @@ namespace iot.device.controller
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
-                  
-                 
-                       services.AddSingleton<ILogger>(serviceProvider =>
-                       {
-                           var logger = serviceProvider.GetRequiredService<ILogger<DeviceClientService>>();
-                           return logger;
+
+                    services.AddSingleton<IThermoService>(serviceProvider =>
+                    {                        
+                        var logger = serviceProvider.GetRequiredService<ILogger<ThermoService>>();
+                        logger.BeginScope(new Dictionary<string, object>
+                        {
+                            {
+                                "Operation_Id", Guid.NewGuid().ToString()
+                            }
                         });
+                        return new ThermoService(new List<string>() {conn}, TransportType.Mqtt, logger);
+                                                                                            
+                    });
+                    services.AddSingleton<ILogger>(serviceProvider =>
+                    {
+                        var logger = serviceProvider.GetRequiredService<ILogger<ThermoService>>();
+                        return logger;
+                    });
+
                                               
                 });
 
